@@ -1,0 +1,6 @@
+@base_url = http://localhost:8000
+GET {base_url}/api/experiments
+### sep
+GET {base_url}/api/experiments/4 
+# GET http://localhost:8000/api/experiments/4 
+###

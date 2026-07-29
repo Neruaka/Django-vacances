@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Destinations a decouvrir</h1>
+
+<ul>
+    {% for destination in destinations %}
+        <li>
+            <strong>{{ destination.city }}, {{ destination.country }}</strong>
+            <span class="meta">— {{ destination.get_continent_display }}</span>
+            {% if destination.best_period %}
+                <br><span class="meta">Meilleure periode : {{ destination.best_period }}</span>
+            {% endif %}
+            {% if destination.average_budget %}
+                <br><span class="meta">Budget moyen indicatif : {{ destination.average_budget }} EUR</span>
+            {% endif %}
+            {% if destination.description %}
+                <br>{{ destination.description }}
+            {% endif %}
+        </li>
+    {% empty %}
+        <li>Aucune destination disponible pour le moment.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
