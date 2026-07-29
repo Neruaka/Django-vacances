@@ -7,7 +7,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from wanderlist.travel import views as travel_views
+from travel import views as travel_views
 
 urlpatterns = [
     # Page d'accueil (modification 4)
