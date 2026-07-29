@@ -11,13 +11,14 @@ router.register("wishes", TravelWishViewSet, basename="travel-wish")
 app_name = "travel"
 
 urlpatterns = [
-    # Page HTML classique (point 7 du cahier des charges).
-    # Chemin final : /destinations/
+    # Pages HTML classiques (cahier des charges point 7 + modifications 1 et 4)
     path("destinations/", views.destination_list, name="destination_list"),
+    path("destinations/<int:pk>/", views.destination_detail, name="destination_detail"),
+    path("wishes/", views.wish_list, name="wish_list"),
+    path("wishes/<int:pk>/", views.wish_detail, name="wish_detail"),
 
     # Routes API generees automatiquement par le router (point 3), toutes
-    # prefixees par "api/" pour ne jamais entrer en collision avec la route
-    # HTML ci-dessus (qui utilise aussi le mot "destinations").
-    # Chemins finaux : /api/destinations/, /api/wishes/, etc.
+    # prefixees par "api/" pour ne jamais entrer en collision avec les
+    # routes HTML ci-dessus.
     path("api/", include(router.urls)),
 ]

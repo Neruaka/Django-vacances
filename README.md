@@ -39,16 +39,37 @@ Le serveur écoute sur `http://127.0.0.1:8000/`.
 
 | Méthode | URL | Auth requise | Description |
 |---|---|---|---|
-| GET | `/destinations/` | non | Page HTML publique |
+| GET | `/` | non | Page d'accueil |
+| GET | `/destinations/` | non | Liste HTML publique des destinations |
+| GET | `/destinations/<id>/` | non | **Détail HTML** d'une destination |
+| GET | `/wishes/` | non | Liste HTML de toutes les envies (voir note ci-dessous) |
+| GET | `/wishes/<id>/` | non | **Détail HTML** d'une envie (voir note ci-dessous) |
 | GET | `/api/destinations/` | non | Liste des destinations (JSON) |
-| POST | `/api/destinations/` | oui | Créer une destination |
-| GET/PUT/PATCH/DELETE | `/api/destinations/<id>/` | non (GET) / oui (écriture) | Détail d'une destination |
+| POST | `/api/destinations/` | oui (authentifié) | Créer une destination |
+| GET | `/api/destinations/<id>/` | non | Détail d'une destination (JSON) |
+| PUT/PATCH | `/api/destinations/<id>/` | oui (authentifié) | Modifier une destination |
+| DELETE | `/api/destinations/<id>/` | oui (**staff uniquement**) | Supprimer une destination |
 | GET | `/api/wishes/` | oui | Liste de **mes** envies uniquement |
 | POST | `/api/wishes/` | oui | Ajouter une envie |
 | PATCH/DELETE | `/api/wishes/<id>/` | oui (et propriétaire) | Modifier/supprimer une envie |
 | POST | `/api/wishes/<id>/mark-visited/` | oui (et propriétaire) | Marquer comme visitée |
 | POST | `/api/token/` | non | Obtenir un jeton JWT (`username`, `password`) |
 | POST | `/api/token/refresh/` | non | Renouveler un access token |
+
+**Note importante sur `/wishes/` et `/wishes/<id>/` (pages HTML)** : contrairement
+à l'API JSON (`/api/wishes/`), qui filtre strictement par utilisateur (chacun
+ne voit que ses propres envies via son jeton JWT), ces deux pages HTML
+n'ont pas de mécanisme de connexion par session pour l'instant — elles
+affichent donc les envies de **tous** les utilisateurs, sans filtrage.
+C'est un écart de conception assumé et documenté, pas un oubli : à
+mentionner si la question est posée en soutenance.
+
+**Durée de vie des jetons JWT** : access token valide 2h, refresh token
+valide 7 jours (configuré dans `SIMPLE_JWT`, `wanderlist/settings.py`).
+
+**Permission sur les destinations** : lecture publique, création/modification
+réservées aux utilisateurs authentifiés, **suppression réservée aux
+membres du staff** (`travel/permissions.py`, classe `DestinationPermission`).
 
 ## 5. Exemple de scénario testable (curl)
 

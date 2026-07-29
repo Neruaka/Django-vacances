@@ -87,7 +87,7 @@ Authorization: Bearer {{login.response.body.access}}
 ###
 
 ### Supprimer une destination
-DELETE {{base_url}}/api/destinations/2/
+DELETE {{base_url}}/api/destinations/1/
 Authorization: Bearer {{login.response.body.access}}
 
 ###
@@ -112,7 +112,7 @@ Content-Type: application/json
 Authorization: Bearer {{login.response.body.access}}
 
 {
-  "destination": 2,
+  "destination": 1,
   "priority": "high",
   "desired_period": "Ete 2027",
   "notes": "Voyage en famille"
@@ -157,3 +157,4 @@ DELETE {{base_url}}/api/wishes/1/
 Authorization: Bearer {{login.response.body.access}}
 
 ###
+

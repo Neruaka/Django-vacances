@@ -4,20 +4,20 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import Destination, TravelWish
-from .permissions import IsAuthenticatedOrReadOnly
+from .permissions import DestinationPermission
 from .serializers import DestinationSerializer, TravelWishSerializer
 
 
 class DestinationViewSet(viewsets.ModelViewSet):
     """
     CRUD complet sur les destinations.
-    Lecture publique, ecriture reservee aux utilisateurs authentifies
-    (cahier des charges, point 5).
+    Lecture publique ; creation/modification reservees aux utilisateurs
+    authentifies ; suppression reservee au staff (modification 3).
     """
 
     queryset = Destination.objects.all()
     serializer_class = DestinationSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [DestinationPermission]
 
 
 class TravelWishViewSet(viewsets.ModelViewSet):

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Wanderlist - Accueil{% endblock %}
+
+{% block content %}
+<h1>Wanderlist</h1>
+<p>Carnet de destinations de voyage et liste d'envies personnelle.</p>
+
+<ul>
+    <li>{{ destinations_count }} destination{{ destinations_count|pluralize }} enregistree{{ destinations_count|pluralize }}</li>
+    <li>{{ wishes_count }} envie{{ wishes_count|pluralize }} de voyage au total</li>
+</ul>
+
+<p>
+    <a href="{% url 'travel:destination_list' %}">Voir les destinations</a>
+    &nbsp;|&nbsp;
+    <a href="{% url 'travel:wish_list' %}">Voir les envies</a>
+    &nbsp;|&nbsp;
+    <a href="/admin/">Administration</a>
+</p>
+{% endblock %}

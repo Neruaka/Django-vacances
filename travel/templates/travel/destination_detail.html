@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}{{ destination.city }} - Wanderlist{% endblock %}
+
+{% block content %}
+<p><a href="{% url 'travel:destination_list' %}">&larr; Retour a la liste</a></p>
+
+<h1>{{ destination.city }}, {{ destination.country }}</h1>
+<p class="meta">{{ destination.get_continent_display }}</p>
+
+{% if destination.description %}
+    <p>{{ destination.description }}</p>
+{% endif %}
+
+<ul>
+    {% if destination.best_period %}
+        <li><strong>Meilleure periode :</strong> {{ destination.best_period }}</li>
+    {% endif %}
+    {% if destination.average_budget %}
+        <li><strong>Budget moyen indicatif :</strong> {{ destination.average_budget }} EUR</li>
+    {% endif %}
+    <li><strong>Nombre d'envies enregistrees :</strong> {{ destination.wishes.count }}</li>
+    <li><strong>Ajoutee le :</strong> {{ destination.created_at|date:"d/m/Y" }}</li>
+</ul>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Envie de {{ wish.user.username }} - Wanderlist{% endblock %}
+
+{% block content %}
+<p><a href="{% url 'travel:wish_list' %}">&larr; Retour a la liste des envies</a></p>
+
+<h1>{{ wish.user.username }} souhaite visiter {{ wish.destination }}</h1>
+
+<ul>
+    <li><strong>Priorite :</strong> {{ wish.get_priority_display }}</li>
+    {% if wish.desired_period %}
+        <li><strong>Periode souhaitee :</strong> {{ wish.desired_period }}</li>
+    {% endif %}
+    <li><strong>Visitee :</strong> {% if wish.visited %}Oui{% else %}Pas encore{% endif %}</li>
+    <li><strong>Ajoutee le :</strong> {{ wish.created_at|date:"d/m/Y" }}</li>
+</ul>
+
+{% if wish.notes %}
+    <p><strong>Notes :</strong> {{ wish.notes }}</p>
+{% endif %}
+{% endblock %}

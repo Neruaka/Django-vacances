@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Toutes les envies - Wanderlist{% endblock %}
+
+{% block content %}
+<h1>Toutes les envies de voyage</h1>
+
+<ul>
+    {% for wish in wishes %}
+        <li>
+            <a href="{% url 'travel:wish_detail' wish.pk %}">
+                <strong>{{ wish.user.username }}</strong> souhaite visiter {{ wish.destination }}
+            </a>
+            <span class="meta">— priorite : {{ wish.get_priority_display }}
+            {% if wish.visited %} — deja visitee{% endif %}</span>
+        </li>
+    {% empty %}
+        <li>Aucune envie enregistree pour le moment.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
