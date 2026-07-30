@@ -17,15 +17,13 @@ class IsAuthenticatedOrReadOnly(BasePermission):
 
 class DestinationPermission(BasePermission):
     """
-    Regle specifique aux destinations (modification 3) :
-      - Lecture (GET/HEAD/OPTIONS)      : ouverte a tous.
-      - Creation/modification (POST,
-        PUT, PATCH)                     : reservee aux utilisateurs authentifies.
-      - Suppression (DELETE)            : reservee aux membres du staff
-                                           (is_staff=True). Un utilisateur
-                                           authentifie non-staff peut donc
-                                           creer et modifier une destination,
-                                           mais pas la supprimer.
+    Regle specifique aux destinations :
+      - Lecture (GET/HEAD/OPTIONS)  : ouverte a tous.
+      - Creation (POST)             : reservee aux utilisateurs authentifies.
+      - Modification (PUT, PATCH)   : reservee aux membres du staff (is_staff=True).
+      - Suppression (DELETE)        : reservee aux membres du staff (is_staff=True).
+    Un utilisateur authentifie non-staff peut donc creer une destination,
+    mais ne peut ni la modifier ni la supprimer une fois creee.
     """
 
     def has_permission(self, request, view):
@@ -35,8 +33,8 @@ class DestinationPermission(BasePermission):
         if not (request.user and request.user.is_authenticated):
             return False
 
-        if request.method == "DELETE":
+        if request.method in ("PUT", "PATCH", "DELETE"):
             return bool(request.user.is_staff)
 
-        # POST, PUT, PATCH : authentifie suffit, pas besoin d'etre staff
+        # POST : authentifie suffit, pas besoin d'etre staff
         return True
