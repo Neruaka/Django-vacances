@@ -66,4 +66,4 @@ class DestinationAPITestCase(APITestCase):
             response.data["results"][0]["average_budget"],
             "1800.00",
         )
-    def test_get_specific_destination(self):
+    
