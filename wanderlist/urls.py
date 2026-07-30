@@ -25,4 +25,5 @@ urlpatterns = [
     # Toutes les autres routes de l'app travel (API + pages HTML) sont
     # prefixees ici.
     path("", include("travel.urls")),
+    
 ]

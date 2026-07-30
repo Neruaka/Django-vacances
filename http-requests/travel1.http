@@ -49,7 +49,7 @@ GET {{base_url}}/api/destinations/1/
 
 ###
 
-### Creer une destination (authentification requise)
+### Creer une destination par bob(authentification requise)
 POST {{base_url}}/api/destinations/
 Content-Type: application/json
 Authorization: Bearer {{token_bob}}
@@ -61,6 +61,23 @@ Authorization: Bearer {{token_bob}}
   "description": "Ville historique aux nombreux temples.",
   "best_period": "Mars - Mai",
   "average_budget": 1500.00
+}
+
+###
+###
+
+### Creer une destination par ilham(authentification requise)
+POST {{base_url}}/api/destinations/
+Content-Type: application/json
+Authorization: Bearer {{token_ilham}}
+
+{
+  "city": "tunis",
+  "country": "tunisie",
+  "continent": "africa",
+  "description": "capital.",
+  "best_period": "Mars - Mai",
+  "average_budget": 800.00
 }
 
 ###
@@ -108,20 +125,20 @@ Authorization: Bearer {{token_ilham}}
 
 ### Liste des envies de bob (doit etre differente de celle d'ilham)
 GET {{base_url}}/api/wishes/
-Authorization: Bearer {{loginBob.response.body.access}}
+Authorization: Bearer {{token_bob}}
 
 ###
 
 ### Detail d'une envie
 GET {{base_url}}/api/wishes/1/
-Authorization: Bearer {{login.response.body.access}}
+Authorization: Bearer {{token_bob}}
 
 ###
 
 ### Creer une envie de voyage (ilham)
 POST {{base_url}}/api/wishes/
 Content-Type: application/json
-Authorization: Bearer {{login.response.body.access}}
+Authorization: Bearer {{token_ilham}}
 
 {
   "destination": 1,
@@ -135,7 +152,7 @@ Authorization: Bearer {{login.response.body.access}}
 ### Creer la MEME envie avec bob (doit reussir - utilisateur different)
 POST {{base_url}}/api/wishes/
 Content-Type: application/json
-Authorization: Bearer {{loginBob.response.body.access}}
+Authorization: Bearer {{token_bob}}
 
 {
   "destination": 1,
