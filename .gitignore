@@ -5,3 +5,4 @@ db.sqlite3
 *.log
 .pytest_cache/
 .vscode/
+http-request/

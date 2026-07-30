@@ -2,27 +2,33 @@
 
 ### ================= AUTH (JWT) =================
 
-### Obtenir un token (access + refresh)
+### Obtenir un token (access + refresh) - ilham
 # @name login
+@token_ilham = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzg1NDAzNDI1LCJpYXQiOjE3ODUzOTYyMjUsImp0aSI6ImVjOGY2Y2QxOTliZjRmZjNhYjg2MTI2N2EzNTJmYzdhIiwidXNlcl9pZCI6IjEifQ.2tGeRedkTF4M3KiHxBWJYXv8uVBOjDJpUlrKalxF6B8
+@token_bob = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzg1NDAzNDU4LCJpYXQiOjE3ODUzOTYyNTgsImp0aSI6IjI2ODllNjQ0YjJjODRiN2VhYmU1MzcyNDg2NWU4ZGZiIiwidXNlcl9pZCI6IjIifQ.VVXF72DkBzWfkONLd-ylGkNRdtMPyUIXPuE34xteG1w
 POST {{base_url}}/api/token/
 Content-Type: application/json
 
 {
-  "username": "nerua",
-  "password": "admin"
+  "username": "ilham",
+  "password": "ilham-pass-2026"
 }
 
 ###
 
-### Rafraichir le token access a partir du refresh
-POST {{base_url}}/api/token/refresh/
+### Obtenir un token pour bob (utilisateur secondaire, pour tester l'isolation)
+# @name loginBob
+POST {{base_url}}/api/token/
 Content-Type: application/json
 
 {
-  "refresh": "{{login.response.body.refresh}}"
+  "username": "bob",
+  "password": "bob-pass-2026"
 }
 
 ###
+
+
 
 ### ================= PAGE HTML =================
 
@@ -46,7 +52,7 @@ GET {{base_url}}/api/destinations/1/
 ### Creer une destination (authentification requise)
 POST {{base_url}}/api/destinations/
 Content-Type: application/json
-Authorization: Bearer {{login.response.body.access}}
+Authorization: Bearer {{token_bob}}
 
 {
   "city": "Kyoto",
@@ -62,7 +68,7 @@ Authorization: Bearer {{login.response.body.access}}
 ### Modifier une destination (PUT - remplacement complet)
 PUT {{base_url}}/api/destinations/1/
 Content-Type: application/json
-Authorization: Bearer {{login.response.body.access}}
+Authorization: Bearer {{token_bob}}
 
 {
   "city": "Kyoto",
@@ -78,7 +84,7 @@ Authorization: Bearer {{login.response.body.access}}
 ### Modifier une destination (PATCH - modification partielle)
 PATCH {{base_url}}/api/destinations/1/
 Content-Type: application/json
-Authorization: Bearer {{login.response.body.access}}
+Authorization: Bearer {{token_bob}}
 
 {
   "average_budget": 1700.00
@@ -87,16 +93,22 @@ Authorization: Bearer {{login.response.body.access}}
 ###
 
 ### Supprimer une destination
-DELETE {{base_url}}/api/destinations/1/
-Authorization: Bearer {{login.response.body.access}}
+DELETE {{base_url}}/api/destinations/2/
+Authorization: Bearer {{token_bob}}
 
 ###
 
 ### ================= WISHES (envies de voyage - authentification requise) =================
 
-### Liste des envies de l'utilisateur connecte
+### Liste des envies d'ilham
 GET {{base_url}}/api/wishes/
-Authorization: Bearer {{login.response.body.access}}
+Authorization: Bearer {{token_ilham}}
+
+###
+
+### Liste des envies de bob (doit etre differente de celle d'ilham)
+GET {{base_url}}/api/wishes/
+Authorization: Bearer {{loginBob.response.body.access}}
 
 ###
 
@@ -106,7 +118,7 @@ Authorization: Bearer {{login.response.body.access}}
 
 ###
 
-### Creer une envie de voyage
+### Creer une envie de voyage (ilham)
 POST {{base_url}}/api/wishes/
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.access}}
@@ -116,6 +128,32 @@ Authorization: Bearer {{login.response.body.access}}
   "priority": "high",
   "desired_period": "Ete 2027",
   "notes": "Voyage en famille"
+}
+
+###
+
+### Creer la MEME envie avec bob (doit reussir - utilisateur different)
+POST {{base_url}}/api/wishes/
+Content-Type: application/json
+Authorization: Bearer {{loginBob.response.body.access}}
+
+{
+  "destination": 1,
+  "priority": "low",
+  "desired_period": "Hiver 2027",
+  "notes": "Voyage solo"
+}
+
+###
+
+### Recreer la meme envie avec ilham (doit echouer - doublon, 400)
+POST {{base_url}}/api/wishes/
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.access}}
+
+{
+  "destination": 1,
+  "priority": "medium"
 }
 
 ###
@@ -152,9 +190,14 @@ Authorization: Bearer {{login.response.body.access}}
 
 ###
 
+### Bob tente de voir l'envie d'ilham (id 1) -> doit repondre 404, pas 403
+GET {{base_url}}/api/wishes/1/
+Authorization: Bearer {{loginBob.response.body.access}}
+
+###
+
 ### Supprimer une envie
 DELETE {{base_url}}/api/wishes/1/
 Authorization: Bearer {{login.response.body.access}}
 
 ###
-

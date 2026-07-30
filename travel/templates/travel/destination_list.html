@@ -6,7 +6,9 @@
 <ul>
     {% for destination in destinations %}
         <li>
-            <strong>{{ destination.city }}, {{ destination.country }}</strong>
+            <a href="{% url 'travel:destination_detail' destination.pk %}">
+                <strong>{{ destination.city }}, {{ destination.country }}</strong>
+            </a>
             <span class="meta">— {{ destination.get_continent_display }}</span>
             {% if destination.best_period %}
                 <br><span class="meta">Meilleure periode : {{ destination.best_period }}</span>
