@@ -45,14 +45,6 @@ def destination_detail(request, pk):
 def wish_list(request):
     """
     Page HTML listant TOUTES les envies, tous utilisateurs confondus.
-
-    ATTENTION - choix de conception a connaitre : contrairement a l'API
-    (/api/wishes/), qui filtre strictement par request.user (chacun ne
-    voit que ses propres envies via un jeton JWT), cette page HTML n'a pas
-    de mecanisme de connexion par session pour l'instant. Elle affiche donc
-    toutes les envies de tous les utilisateurs, sans filtrage. C'est un
-    ecart volontaire et documente par rapport a la logique de vie privee de
-    l'API - a mentionner si demande en soutenance.
     """
     wishes = TravelWish.objects.select_related("user", "destination").all()
     return render(
@@ -65,8 +57,6 @@ def wish_list(request):
 def wish_detail(request, pk):
     """
     Modification 1 : page HTML de detail pour UNE envie precise.
-    Meme remarque que wish_list : pas de filtrage par utilisateur ici,
-    contrairement a l'API JSON qui reste strictement privee.
     """
     wish = get_object_or_404(TravelWish, pk=pk)
     return render(

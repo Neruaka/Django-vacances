@@ -83,8 +83,7 @@ class TravelWishSerializer(serializers.ModelSerializer):
             destination=destination,
         )
 
-        # En cas de modification (PATCH/PUT), on exclut l'objet courant
-        # de la verification, sinon il se detecterait lui-meme en doublon.
+        # Pour la MAJ
         if self.instance:
             queryset = queryset.exclude(pk=self.instance.pk)
 

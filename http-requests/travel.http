@@ -1,0 +1,160 @@
+@base_url = http://localhost:8000
+
+### ================= AUTH (JWT) =================
+
+### Obtenir un token (access + refresh)
+# @name login
+POST {{base_url}}/api/token/
+Content-Type: application/json
+
+{
+  "username": "nerua",
+  "password": "admin"
+}
+
+###
+
+### Rafraichir le token access a partir du refresh
+POST {{base_url}}/api/token/refresh/
+Content-Type: application/json
+
+{
+  "refresh": "{{login.response.body.refresh}}"
+}
+
+###
+
+### ================= PAGE HTML =================
+
+### Liste des destinations (page HTML classique)
+GET {{base_url}}/destinations/
+
+###
+
+### ================= DESTINATIONS (lecture publique, ecriture authentifiee) =================
+
+### Liste des destinations
+GET {{base_url}}/api/destinations/
+
+###
+
+### Detail d'une destination
+GET {{base_url}}/api/destinations/1/
+
+###
+
+### Creer une destination (authentification requise)
+POST {{base_url}}/api/destinations/
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.access}}
+
+{
+  "city": "Kyoto",
+  "country": "Japon",
+  "continent": "asia",
+  "description": "Ville historique aux nombreux temples.",
+  "best_period": "Mars - Mai",
+  "average_budget": 1500.00
+}
+
+###
+
+### Modifier une destination (PUT - remplacement complet)
+PUT {{base_url}}/api/destinations/1/
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.access}}
+
+{
+  "city": "Kyoto",
+  "country": "Japon",
+  "continent": "asia",
+  "description": "Ville historique aux nombreux temples et jardins zen.",
+  "best_period": "Mars - Mai",
+  "average_budget": 1600.00
+}
+
+###
+
+### Modifier une destination (PATCH - modification partielle)
+PATCH {{base_url}}/api/destinations/1/
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.access}}
+
+{
+  "average_budget": 1700.00
+}
+
+###
+
+### Supprimer une destination
+DELETE {{base_url}}/api/destinations/1/
+Authorization: Bearer {{login.response.body.access}}
+
+###
+
+### ================= WISHES (envies de voyage - authentification requise) =================
+
+### Liste des envies de l'utilisateur connecte
+GET {{base_url}}/api/wishes/
+Authorization: Bearer {{login.response.body.access}}
+
+###
+
+### Detail d'une envie
+GET {{base_url}}/api/wishes/1/
+Authorization: Bearer {{login.response.body.access}}
+
+###
+
+### Creer une envie de voyage
+POST {{base_url}}/api/wishes/
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.access}}
+
+{
+  "destination": 1,
+  "priority": "high",
+  "desired_period": "Ete 2027",
+  "notes": "Voyage en famille"
+}
+
+###
+
+### Modifier une envie (PUT)
+PUT {{base_url}}/api/wishes/1/
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.access}}
+
+{
+  "destination": 1,
+  "priority": "medium",
+  "desired_period": "Automne 2027",
+  "notes": "Voyage en couple",
+  "visited": false
+}
+
+###
+
+### Modifier une envie (PATCH)
+PATCH {{base_url}}/api/wishes/1/
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.access}}
+
+{
+  "priority": "low"
+}
+
+###
+
+### Marquer une envie comme visitee (action personnalisee)
+POST {{base_url}}/api/wishes/1/mark-visited/
+Authorization: Bearer {{login.response.body.access}}
+
+###
+
+### Supprimer une envie
+DELETE {{base_url}}/api/wishes/1/
+Authorization: Bearer {{login.response.body.access}}
+
+###
+
